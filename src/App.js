@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./index.css"
+import Header from "./components/Header";
+import AddTask from "./components/AddTask";
+import Card from "./components/Card";
+import DisplayTasks from "./components/DisplayTasks";
 
-function App() {
+const App = () => {
+
+  const [showAddTask, setShowAddTask] = useState(false);
+  
+  const [tasks, setTasks] = useState([]);
+
+  const addNewTask = (newTask) => {
+    setTasks(prevTasks => [newTask, ...prevTasks]);
+  }
+
+  const updateTasks = (id) => {
+    setTasks(prevTasks => {
+      return prevTasks.filter(task => task.id != id);
+    })
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Card>
+      <Header onAdd={() => setShowAddTask(!showAddTask)} showTask={showAddTask}/>
+      {showAddTask && <AddTask onNewTask={addNewTask} />}
+      <DisplayTasks taskData={tasks} onDeleteTask={updateTasks}/>
+    </Card>
+  )
 }
 
 export default App;
