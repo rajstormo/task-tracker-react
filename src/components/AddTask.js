@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Button from "./Button"
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddTask(props) {
   const style = {
@@ -11,21 +12,18 @@ export default function AddTask(props) {
   const [taskDate, setTaskDate] = useState("");
   const [reminder, setReminder] = useState(false);
 
-  const sendNewTaskDetails = (e) => {
+
+  const sendNewTaskDetails = async(e) => {
     e.preventDefault();
     if (taskName === "") {
       alert("Task Name must be filled");
       return;
     }
-    
-    props.onNewTask({
-      id: Math.random()*10000,
-      task: taskName,
-      daytimeinfo: taskDate,
-      reminder: reminder
-    })
 
-    setTaskDate("");
+    const todo = {taskId: uuidv4() ,taskName: taskName, taskDate: taskDate, taskReminder: reminder};
+    props.onNewTask(todo);
+
+    setTaskName("");
     setTaskDate("");
     setReminder(false);
   }
